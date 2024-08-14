@@ -8,5 +8,15 @@ declare module 'knex/types/tables' {
       username: string
       password: string
     }
+    meals: {
+      id: string
+      name: string
+      description: null | string
+      user_id: string
+      is_within_diet: boolean
+      meal_time: string
+      created_at?: string
+      updated_at?: string
+    }
   }
 }
