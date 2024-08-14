@@ -3,6 +3,8 @@ import { z } from 'zod'
 import { createMealUseCase } from '../useCases/meal/createMealUseCase'
 import { checkValidDate } from '../../utils/check-valid-date'
 import { listAllUserMealsUseCase } from '../useCases/meal/listAllUserMealsUseCase'
+import { getMealByIdUseCase } from '../useCases/meal/getMealByIdUseCase'
+import { AppError } from '../../config/errors/AppError'
 
 export async function createMealController(
   request: FastifyRequest,
@@ -43,7 +45,25 @@ export async function patchMealController(
 export async function getMealByIdController(
   request: FastifyRequest,
   replay: FastifyReply,
-) {}
+) {
+  const requestParamSchema = z.object({
+    id: z.string(),
+  })
+
+  const { id } = requestParamSchema.parse(request.params)
+  const meal = await getMealByIdUseCase(id)
+  if (!meal) {
+    throw new AppError('Meal not found', 404)
+  }
+  const userId = request.id
+  if (userId !== meal.user_id) {
+    throw new AppError('Meal not found', 404)
+  }
+
+  return replay.status(200).send({
+    meal,
+  })
+}
 
 export async function listAllUserMealsController(
   request: FastifyRequest,
