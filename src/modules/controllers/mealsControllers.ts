@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 import { createMealUseCase } from '../useCases/meal/createMealUseCase'
 import { checkValidDate } from '../../utils/check-valid-date'
+import { listAllUserMealsUseCase } from '../useCases/meal/listAllUserMealsUseCase'
 
 export async function createMealController(
   request: FastifyRequest,
@@ -47,7 +48,14 @@ export async function getMealByIdController(
 export async function listAllUserMealsController(
   request: FastifyRequest,
   replay: FastifyReply,
-) {}
+) {
+  const userId = request.id!
+  const list = await listAllUserMealsUseCase(userId)
+
+  return replay.status(200).send({
+    meals: list,
+  })
+}
 
 export async function deleteUserMeal(
   request: FastifyRequest,
