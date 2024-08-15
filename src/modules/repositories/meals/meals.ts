@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import { knex } from '../../../config/database'
+import { Meal } from '../../../models/Meal'
 import {
   CreateMealDTO,
   DeleteMealByIdDTO,
@@ -47,12 +48,20 @@ export async function patchMeal({
   mealTime,
   name,
 }: PatchMealDTO) {
-  await knex('meals')
-    .update({
-      is_within_diet: isWithinDiet,
-      meal_time: mealTime,
-      name,
-      description,
-    })
-    .where('id', id)
+  const options: Meal = {}
+
+  if (description) {
+    options.description = description
+  }
+  if (isWithinDiet) {
+    options.is_within_diet = isWithinDiet
+  }
+  if (mealTime) {
+    options.meal_time = mealTime
+  }
+  if (name) {
+    options.name = name
+  }
+
+  await knex('meals').update(options).where('id', id)
 }
