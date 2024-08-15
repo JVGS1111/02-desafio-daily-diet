@@ -6,6 +6,10 @@ export interface ListUserMealsDTO {
   userId: string
 }
 
+export interface GetUserMealsSummaryDTO {
+  userId: string
+}
+
 export interface DeleteMealByIdDTO {
   id: string
 }

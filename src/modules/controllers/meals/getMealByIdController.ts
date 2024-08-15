@@ -12,14 +12,8 @@ export async function getMealByIdController(
   })
 
   const { id } = requestParamSchema.parse(request.params)
-  const meal = await getMealByIdUseCase(id)
-  if (!meal) {
-    throw new AppError('Meal not found', 404)
-  }
   const userId = request.id
-  if (userId !== meal.user_id) {
-    throw new AppError('Meal not found', 404)
-  }
+  const meal = await getMealByIdUseCase(userId, id)
 
   return replay.status(200).send({
     meal,

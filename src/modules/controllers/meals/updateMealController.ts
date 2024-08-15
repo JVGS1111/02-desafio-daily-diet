@@ -29,19 +29,17 @@ export async function updateMealController(
   ) {
     return replay.status(400).send({ message: 'No data informed' })
   }
-  const isValidDate = checkValidDate(mealTime!)
-
-  if (!isValidDate) {
-    return replay.status(400).send({ message: 'Invalid date' })
-  }
 
   const userId = request.id!
-  const meal = await getMealByIdUseCase(id)
-  if (!meal || meal.user_id !== userId) {
-    throw new AppError('Meal not found', 404)
-  }
 
-  await updateMealUseCase({ id, isWithinDiet, mealTime, name, description })
+  await updateMealUseCase({
+    userId,
+    id,
+    isWithinDiet,
+    mealTime,
+    name,
+    description,
+  })
 
   return replay.status(204).send()
 }

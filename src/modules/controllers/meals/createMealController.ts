@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { checkValidDate } from '../../../utils/check-valid-date'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { createMealUseCase } from '../../useCases/meal/createMealUseCase'
 
@@ -16,12 +15,6 @@ export async function createMealController(
 
   const { isWithinDiet, mealTime, name, description } =
     createMealControllerBodySchema.parse(request.body)
-
-  const isValidDate = checkValidDate(mealTime)
-
-  if (!isValidDate) {
-    return replay.status(400).send({ message: 'Invalid date' })
-  }
 
   await createMealUseCase({
     userId: request.id,

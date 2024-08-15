@@ -1,3 +1,5 @@
+import { AppError } from '../../../config/errors/AppError'
+import { checkValidDate } from '../../../utils/check-valid-date'
 import { createMeal } from '../../repositories/meals/meals'
 
 interface CreateMealUseCaseProps {
@@ -15,6 +17,11 @@ export async function createMealUseCase({
   mealTime,
   name,
 }: CreateMealUseCaseProps) {
+  const isValidDate = checkValidDate(mealTime)
+
+  if (!isValidDate) {
+    throw new AppError('Invalid date', 400)
+  }
   await createMeal({
     description,
     isWithinDiet,

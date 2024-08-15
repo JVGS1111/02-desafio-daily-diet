@@ -6,6 +6,7 @@ import { listAllUserMealsController } from '../modules/controllers/meals/listAll
 import { getMealByIdController } from '../modules/controllers/meals/getMealByIdController'
 import { deleteMealController } from '../modules/controllers/meals/deleteMealController'
 import { updateMealController } from '../modules/controllers/meals/updateMealController'
+import { getUserMealsSummaryController } from '../modules/controllers/meals/getUserMealsSummaryController'
 
 export async function mealsRoutes(app: FastifyInstance) {
   app.post('/', { preHandler: [ensureAuthentication] }, createMealController)
@@ -13,4 +14,5 @@ export async function mealsRoutes(app: FastifyInstance) {
   app.get('/:id', { preHandler: [ensureAuthentication] }, getMealByIdController)
   app.delete('/:id', { preHandler: [ensureAuthentication] }, deleteMealController)
   app.patch('/:id', { preHandler: [ensureAuthentication] }, updateMealController)
+  app.get('/summary', { preHandler: [ensureAuthentication] }, getUserMealsSummaryController)
 }
